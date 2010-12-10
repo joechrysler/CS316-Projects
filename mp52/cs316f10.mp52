@@ -1,0 +1,35 @@
+
+CS 316                   Machine Problem #5.2                Fall, 2010        
+                          (Due 12/08/2010)
+
+Purpose of the Program: To learn how to represent a graph in an adjacency
+matrix and use a given algorithm to find a minimum spanning tree in a 
+weighted graph.
+
+Description of the Problem: Spanning trees find application in obtaining 
+an independent set of circuit equations for an electrical network. Also, 
+in the construction of communication network connecting n cities, spanning 
+is a useful application. The minimum number of links needed to connect 
+the n cities is n - 1. In any practical situation, however, the edge will 
+have weights assigned with them. These weights might represent the cost of 
+construction, the length of the link, etc. Given such a graph one would 
+then wish to select for construction a set of communication links that 
+would connect all the cities and have minimum total cost or be of minimum 
+total length. In either case the links selected will have to form a tree
+(assuming all weights are all positive). If not so, then the selection of 
+links contains a cycle. Removal of any one of the links on the cycle will 
+result in a link selection of less cost. We are, therefore,interested in 
+finding a spanning tree with minimum cost.  
+
+One approach to determining a minimum cost spanning tree of a graph has 
+been given by Kruskal or by Dijkstra (see text pages 397-400). You are to 
+write a program that performs the following:
+
+1) Read a graph into its adjacency matrix.
+2) Find a minimum spanning tree.
+3) Display the minimum spanning tree
+
+Note: For a given graph, there may exist more than one spanning tree or 
+minimum spanning tree.
+
+

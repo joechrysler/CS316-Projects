@@ -1,0 +1,30 @@
+
+CS 316                   Machine Problem #5.1                Fall, 2010        
+                          (Due 12/08/2010)
+
+Purpose of the Program: To learn how to represent a graph in an adjacency
+matrix and use a given algorithm to find a shortest path between any two 
+vertices.
+
+Description of the Problem: Finding the shortest path is a classical problem 
+in graph theory. A large number of optimization problems are mathematically 
+equivalent to finding shortest paths in a graph. For example, in an airline
+reservation system, a ticket agent often receives a customer's inquiry 
+containing two cities on the map and tries to determine if a flight connects 
+these two cities with the lowest fare. 
+
+Although there are many algorithms have been developed for solving the
+problem described above. We will use the one introduced by Dijkstra for finding 
+the shortest path. You are to write a program that performs the following:
+
+
+1) Read a graph into its adjacency matrix.
+2) Read a pair of vertices (e.g. 2 and 3) and determine if a shortest
+   path exists. 
+3) Display the shortest path and its weight.
+
+Note: Use Dijkstra algorithm given on page 385 and the example illustrated in 
+Figure 8.7, on page 386.
+
+
+
