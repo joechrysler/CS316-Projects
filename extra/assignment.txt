@@ -1,0 +1,125 @@
+              CS 316   Machine Problem -Extra     Fall  2010
+                         (Due: 12/08/2010)
+                        
+Program Purpose:
+
+1. To understand the implementation of a binary search tree and the 
+   associated operations on it.
+
+2. How the compilers and interpreters maintain information about a
+   program's identifiers in a symbol table.
+
+Program Description:
+
+You are to write a program that will build a symbol table (i.e., a 
+table of identifiers in a program) as a binary tree structure based 
+on the binary sort concept (i.e., if the new symbol is smaller than 
+the symbol in the current node it is placed in the left subtree of 
+the node otherwise it is placed in the right subtree of the node).  
+The symbol table should also keep track of the symbol type, there 
+are only four valid types:  boolean, char, integer, and real.  Your 
+program will build the symbol table from var section of the input-file 
+and will also handle the unknown types and redeclarations of symbols 
+in this phase as ERRORS.
+
+Once the symbol table has been built, your program should perform an 
+inorder traversal (nonrecursive) of the binary tree and print the 
+symbol names during the traversal.
+
+Next your program should process the begin - end section of the input
+-file which contains symbols that will be referenced during execution:  
+it should flag type mismatches and references to undeclared symbols in 
+this phase as ERRORS.
+
+--> 	A symbol can have length up to six characters.
+
+-->	var, begin, and end are reserved symbols (i.e., they are not 
+        part of the identifiers either declared or referenced).
+
+Further details will be provided in the CLASS.
+
+INPUT:  cs316extra.dat is available on csis server.
+
+	- one line of input contains either a reserved symbol
+ 	  (var. begin, end) or a symbol declaration or a reference
+          to a symbol.
+
+	Example:
+
+var
+	hi  :  integer;
+	bit  :  boolean;
+	avrg  :  real;
+	count  :  integer;
+	x  :  char;
+           .
+           .
+           .
+	y1  :  character:
+        indx : pointer;
+	count  :  real;
+begin
+	avrg  =  real;
+	hi  =  real;
+	z  =  char;
+	x  =  char;
+           .
+           .
+           .
+	indx  =  pointer;
+end
+
+Output: with proper labels:
+	- echo the input line
+	- print error messages for unknown types and redeclara
+          tions of symbols during symbol table building phase 
+          (one per line).
+	- print the result of inorder traversal of the binary
+          tree (use the entire line if possible).
+	- print error messages for type mismatches and references 
+          to undefined symbols (one per line).
+
+Example:
+
+1) Symbol table building phase:
+	
+	hi  :  integer
+
+	bit  :  boolean
+		.
+		.
+		.
+         yl  :  character
+** error yl  :  character -- unknown type
+
+       indx  :  pointer
+** error indx  :  pointer  -- unknown type
+
+      count  :  real
+** error count  :  real -- attempt to redeclare the symbol
+             .
+             .
+             .
+2) Result of inorder traversal:
+
+avrg   bit     count  hi  . . .   x
+
+3) Symbol table processing phase:
+
+**	error hi  :  real  -  type mismatch
+
+**	error z  :  char --  attempt to reference undefined symbol
+
+**	error indx  :  pointer  -- attempt to reference undefined 
+	symbol
+
+
+		
+	
+
+
+
+ 
+
+ 
+

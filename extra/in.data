@@ -1,0 +1,33 @@
+VAR
+   SIZE : INTEGER;
+   VALUE : REAL;
+   COUNTER : INTEGER;
+   BIT : BINARY;
+   AVRG : REAL;
+   TRUE : BOOLEAN;
+   I : INTEGER;
+   J : INTR;
+   X : CHAR;
+   C : CHARACTER;
+   INDEX : POINTER;
+   HEAD : QUEUE;
+   TOP : NULL;
+   LIST : INTEGER;
+   MAX : REAL;
+   I : INTEGER;
+   ARRAY : POINTER;
+   ITEM : CHAR;
+BEGIN
+   SIZE = INTEGER;
+   MAX = INTEGER;
+   I = REAL;
+   SUM = REAL;
+   AVRG = INTEGER;
+   X = BOOL;
+   STACK = NULL;
+   X = CHAR;
+   BOTTOM = POINTER;
+   LIST = ARRAY;
+   ITEM = CHR;
+   INDEX = CHARACTER;
+END
