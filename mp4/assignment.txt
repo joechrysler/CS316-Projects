@@ -1,0 +1,98 @@
+                     CS316    Machine Problem #4 
+                              (Due: 11/15/2010)     
+ 
+Program Purpose: 
+ 
+To understand a heap structure and the implementation of a priority queue. 
+ 
+Program Description: 
+ 
+In many applications, records with keys must be processed in order but 
+not necessarily full sorted order and not necessarily all at once. Often
+a set of records must be collected, then the largest one is processed based
+on certain criteria, then perhaps more records are collected, then the next 
+largest is processed, and so forth.  An appropriate data structure in such 
+an environment is the one which supports the operations of inserting a new 
+element and deleting the largest element. Such a data structure is called 
+a priority queue based on the "heap" property of a binary tree. Applications 
+of a priority queue include: 
+ 
+-  simulation systems (event times), 
+-  process scheduling in computer systems (priorities), and  
+-  numerical computing (computational errors). 
+ 
+You are to write a program that will implement a priority queue for scheduling
+jobs to CPU.  The highest priority job is the next one to be scheduled to the
+CPU at the next clock tic (software clock-- in your program). Assume that once
+a job is removed from the priority queue for scheduling, it will be completed
+within its allocated time.  After each completion of a job from the queue, the
+next job from input file (if any) has to be brought into the queue.  Your 
+program should also keep track of the clock tic when a job enters the priority
+queue--it is needed to determine the waiting time of a job before it gets the
+CPU. All the jobs in the input file must be processed. 
+ 
+The program will run in two phases:
+
+In phase one, 
+-  clock set to 0
+-  all variables will be initialized 
+-  first 10 jobs from input file will be read into queue
+ 
+In phase two, the program runs through the loop 
+-  clock tics 
+-  schedule the highest priority job (and related processing) 
+-  get the next job from input file (if any) and adjust the heap,
+   else adjust the remaining heap. 
+ 
+The loop continues until all jobs have been processed (that is heap
+is empty). 
+
+*** Note: when two jobs have the same priority, the one arrived earlier gets
+          to be executed first.
+
+
+ 
+Sample Input: (1st number - priority, 2nd number - jobid, 3rd number - 
+               estimated excution time)  
+ 
+9     308    2
+2     123    3
+1      29    1
+8     209    4
+3      15    3
+4     106    5 
+3      10    4
+2      99    6
+2     199    2
+1      89    1
+6     275   10
+ 
+Sample Output: 
+ 
+input read: 9     308    2
+input read: 2     123    3
+input read: 1      29    1
+input read: 8     209    4 
+input read: 3      15    3 
+input read: 4     106    5 
+input read: 3      10    4
+input read: 2      99    6 
+input read: 2     199    2 
+input read: 1      89    1 
+ 
+process scheduled: pid = 308, priority = 9, waiting time = 0, turnaround time = 2 
+ 
+input read: 6     275
+  
+process scheduled: pid = 209, priority = 8, waiting time = 2, turnaround time = 5
+
+input read: ...
+
+process scheduled: pid = ..., priority =..., waiting time =..., turnaround time =...
+          .
+          .
+          .
+The average waiting time = ...
+The average turnaround time = ...
+The system throughtput = ...
+

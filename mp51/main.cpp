@@ -3,6 +3,7 @@
 #include <fstream>
 #include <vector>
 #include <queue>
+#include <climits>
 //#include "graph.h"
 
 using namespace std;
@@ -26,6 +27,16 @@ struct Vertex {
     predecessor   = NULL;
     visited       = false;
   };
+};
+
+void inTBC(int v, deque<Vertex> &tbc) {
+  deque<Vertex>::iterator x;
+  bool found = false;
+
+  for (x = tbc.begin(); x != tbc.end(); x++)
+    if (x.number == v)
+      found = true;
+  return found;
 };
 
 int main(int argc, const char *argv[])
@@ -57,6 +68,7 @@ int main(int argc, const char *argv[])
     jobs.push(thisJob);
   }
 
+  // Debug Prints
   if (DEBUG) {
     cout << endl;
     cout << "Adjacency Matrix:" << endl;
@@ -78,17 +90,32 @@ int main(int argc, const char *argv[])
 
 
   while (!jobs.empty()) {
-    vector<Vertex>              toBeChecked;
-    vector<Vertex>::iterator    v;
+    deque<Vertex>               toBeChecked;
+    Vertex                      *v;
     Vertex                      emptyVertex;
     emptyVertex.init();
+    int u;
 
+    // Add all vertices to toBeChecked
     for (i = 0;i < max;i++) {
       emptyVertex.number = i;
       toBeChecked.push_back(emptyVertex);
     }
+
+    while (!toBeChecked.empty()) {
+      v = toBeChecked.front();
+      for (u = 0;u < max;u++) {
+        if (adjacency[v->number][u] != 0, and inTBC(u, toBeChecked) {
+          if (adjacency[v->number][u].distance > v->distance + adjacency[v->number][u]
+        }
+      }
+
+    }
+      
+    cout << jobs.front().x << "  " << jobs.front().y << endl;
     
 
+    jobs.pop();
   }
   outfile.close();
   return 0;
