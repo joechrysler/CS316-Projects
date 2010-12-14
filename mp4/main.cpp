@@ -138,6 +138,9 @@ class Heap {
     bool empty() {
       return (data.size() == 0);
     };
+    void dropLast() {
+      data.pop_back();
+    };
 
   private:
     bool hasLeftChild(int i) {
@@ -181,6 +184,8 @@ int main() {
     newJob.read(infile);
     pq.enqueue(newJob);
   }
+  pq.dropLast();
+
   cout <<left<< setw(20) << "Jobs queued";
   pq.print();
 
@@ -193,4 +198,3 @@ int main() {
   }
 	return 0;
 }
-
