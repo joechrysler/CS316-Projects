@@ -4,6 +4,7 @@
 #include <vector>
 #include <queue>
 #include <climits>
+#include <string>
 //#include "graph.h"
 
 using namespace std;
@@ -97,34 +98,42 @@ class Graph {
           if (adjacencyMatrix[i][j] != 0)
             addEdge(vertices[i], vertices[j], adjacencyMatrix[i][j]);
     };
-    void printAdjacencyMatrix() {
+    void printAdjacencyMatrix(ofstream& outfile) {
       int i, j;
 
-      cout << endl << "Adjacency Matrix:" << endl;
+      outfile << endl << "Adjacency Matrix:" << endl;
       for (i = 0; i < adjacencyMatrix.size(); i++) {
         for (j = 0; j < adjacencyMatrix[i].size(); j++) {
-          cout << setw(4) << adjacencyMatrix[i][j] << "  ";
+          outfile << setw(4) << adjacencyMatrix[i][j] << "  ";
         }
-        cout << endl;
+        outfile << endl;
       }
     };
 
     // List Printing Functions
-    void printVertices() {
+    void printVertices(ofstream& outfile) {
       int size = vertices.size();
       int i;
-      cout << endl << "Vertices:" << endl;
+      outfile << endl << "Vertices:" << endl;
       for (i = 0; i < size; i++) {
-        cout << vertices.at(i)->id << endl;
+        outfile << vertices.at(i)->id << endl;
       }
     };
-    void printEdges() {
+    void printEdges(ofstream& outfile) {
       int size = edges.size();
       int i;
-      cout << endl << "Edges:" << endl;
+      outfile << endl << "Edges:" << endl;
       for (i = 0; i < size; i++) {
-        cout << edges.at(i)->v1->id << "-->" <<  edges.at(i)->v2->id << " : " << edges.at(i)->distance << endl;
+        outfile << edges.at(i)->v1->id << "-->" <<  edges.at(i)->v2->id << " : " << edges.at(i)->distance << endl;
       }
+    };
+    void PrintHeading(ofstream& outfile) {
+      outfile << left << setw(12) << "  Path" << setw(9) << "Length" << "Diagram" << endl;
+      outfile << left << setw(12) << "  ------" << setw(9) << "------" << "-------" << endl;
+    };
+    void PrintLabel(int o, int e, ofstream& outfile) {
+      string something = "";
+      outfile << right << setw(3) << o << " to " << setw(5) << left << e << something;
     };
 
     // Garbage Collection
@@ -135,6 +144,7 @@ class Graph {
     };
     void clearVertices() {
       vertices.erase(vertices.begin(), vertices.end());
+      static_vertices.erase(static_vertices.begin(), static_vertices.end());
     };
     void clearEdges() {
       edges.erase(edges.begin(), edges.end());
@@ -215,17 +225,21 @@ class Graph {
           return true;
       return false;
     };
-    void PrintShortestPath(int v) {
+    void PrintShortestPath(int v, ofstream& outfile) {
       if (v < static_vertices.size()) {
         Vertex* e = static_vertices.at(v);
-        cout << "Path Length: " << e->distance << endl;
-        while (e) {
-          cout << e->id;
-          if (e->predecessor != NULL)
-            cout << " --> ";
-          e = e->predecessor;
+        if (e->distance < 0) {
+          outfile << "No Shortest Path Exists" << endl;
+        } else {
+          outfile << left << setw(5) << e->distance << "    ";
+          while (e) {
+            outfile << e->id;
+            if (e->predecessor != NULL)
+              outfile << " --> ";
+            e = e->predecessor;
+          }
+          outfile << endl;
         }
-        cout << endl;
       }
     };
     void setOrigin(int v) {
@@ -256,57 +270,24 @@ int main(int argc, const char *argv[]) {
 		cout << "couldn't open input or output file" << endl;
 
   greg.readAdjacencyMatrix(infile);
-  greg.printAdjacencyMatrix();
+  //greg.printAdjacencyMatrix();
   greg.ProcessAdjacencyMatrix();
 
-  greg.setOrigin(9);
-  greg.dijkstra();
-  greg.PrintShortestPath(0);
+  while (infile) {
+    infile >> newJob.x >> newJob.y;
+    jobs.push(newJob);
+  }
+
+  greg.PrintHeading(outfile);
+  while (jobs.size() > 1) {
+    greg.setOrigin(jobs.front().x);
+    greg.dijkstra();
+    greg.PrintLabel(jobs.front().x, jobs.front().y, outfile);
+    greg.PrintShortestPath(jobs.front().y, outfile);
+    greg.reprocess();
+    jobs.pop();
+  }
   
-
-  //while (infile) {
-    //infile >> newJob.x >> newJob.y;
-    //jobs.push(newJob);
-  //}
-
-
-
-  //// Print Jobs
-  //cout << endl;
-  //cout << "Jobs:" << endl;
-  //while (!jobs.empty()) {
-    //cout << jobs.front().x << "  " << jobs.front().y << endl;
-    //jobs.pop();
-  //}
-
-  //while (!jobs.empty()) {
-    //deque<Vertex>               toBeChecked;
-    //Vertex                      *v;
-    //Vertex                      emptyVertex;
-    //emptyVertex.init();
-    //int u;
-
-    //// Add all vertices to toBeChecked
-    //for (i = 0;i < max;i++) {
-      //emptyVertex.number = i;
-      //toBeChecked.push_back(emptyVertex);
-    //}
-
-    //while (!toBeChecked.empty()) {
-      //v = toBeChecked.front();
-      //for (u = 0;u < max;u++) {
-        //if (adjacency[v->number][u] != 0, and inTBC(u, toBeChecked) {
-          //if (adjacency[v->number][u].distance > v->distance + adjacency[v->number][u]
-        //}
-      //}
-
-    //}
-      
-    //cout << jobs.front().x << "  " << jobs.front().y << endl;
-    
-
-    //jobs.pop();
-  //}
-  //outfile.close();
+  outfile.close();
   return 0;
 }
