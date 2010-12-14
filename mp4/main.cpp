@@ -53,6 +53,12 @@ class Job {
 		bool operator< (Job& other) {
 			return (priority < other.priority);
 		};
+    bool operator<= (Job& other) {
+			return (priority <= other.priority);
+    };
+    bool operator>= (Job& other) {
+			return (priority >= other.priority);
+    };
 		bool operator> (Job& other) {
 			return (priority > other.priority);
 		};
@@ -111,9 +117,10 @@ class Heap {
       data[0] = data[data.size()-1];
       data.pop_back();
 
+      // jc - try setting all priorities to 1
       while (!isLeaf(iParent)
             && (data[iParent] < data[lChild] || data[iParent] < data[rChild])) {
-        iChild = (data[lChild] < data[rChild])?
+        iChild = (data[lChild] <= data[rChild])?
           rChild:
           lChild;
 
