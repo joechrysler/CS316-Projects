@@ -4,6 +4,7 @@
 #include <vector>
 #include <stack>
 #include <list>
+#include <math.h>
 
 using namespace std;
 
@@ -14,14 +15,15 @@ class Job {
 		Job() {
 			clear();
 		};
-    Job(int inPriority, int inId, int inRuntimeEstimate) {
+    Job(int inPriority, int inId, int inRuntimeEstimate, int inRecency) {
       priority = inPriority;
       id = inId;
       runtime_estimate = inRuntimeEstimate;
       runtime = 0;
+      recency = inRecency; 
     };
 		void clear() {
-			priority = id = runtime_estimate = runtime = 0;
+			priority = id = runtime_estimate = runtime = recency = 0;
 		};
 
 		void	read(ifstream &infile) {
@@ -38,7 +40,7 @@ class Job {
 					 << "--------------"									<< endl;
 		};
 		void print() {
-			cout << priority << " | ";
+			cout << priority << "." << recency << " | ";
 		};
     void linePrint() {
       cout << setw(5) << priority 
@@ -46,10 +48,25 @@ class Job {
            << setw(5) << runtime_estimate << endl;
     };
     void printId() {
-      cout << id;
+      cout << id << " | ";
+    };
+
+    void setRecency(int r) {
+      recency = r;
     };
 
     // Operator definitions
+    bool larger(Job& other) {
+      if (priority > other.priority) {
+        //cout << "P." << priority << ">" << "P." << other.priority << endl;
+        return true;
+      }
+      if (priority == other.priority && recency < other.recency) {
+        //cout << "R." << recency << ">" << "R." << other.recency << endl;
+        return true;
+      }
+      return false;
+    };
 		bool operator< (Job& other) {
 			return (priority < other.priority);
 		};
@@ -72,6 +89,7 @@ class Job {
 	private:
 		int	priority;
 		int	id;
+    int recency;
 		int runtime_estimate;
 		int runtime;
 };
@@ -80,6 +98,7 @@ class Heap {
   public:
     Heap() {
       data.clear();
+      n = 0;
     };
 
     void add(Job& newJob) {
@@ -87,27 +106,20 @@ class Heap {
     };
 
     void enqueue(Job& newJob) {
+      newJob.setRecency(++n);
       //newJob.linePrint();
       data.push_back(newJob);
-      Job temp;
-      int iTemp;
-      int iNewJob = data.size() -1;
-      int iParent = (iNewJob)/2;
+      int iNewJob = data.size()-1;
+      int iParent = parent(iNewJob);
 
-      while (iNewJob != 0 && data[iNewJob] > data[iParent]) {
-        // Swap data with parent
-        temp = data[iNewJob];
-        data[iNewJob] = data[iParent];
-        data[iParent] = temp;
-
-        // Swap indexes to keep the loop functional
+      while (iNewJob != 0 && data[iNewJob].larger(data[iParent])) {
+        swap(iNewJob, iParent);
         iNewJob = iParent;
-        iParent = (iNewJob)/2;
+        iParent = parent(iNewJob);
       }
     };
     Job dequeue() {
       Job temp = data[0];
-      Job swap;
       int iParent = 0;
       int lChild = 2*(iParent+1)-1;
       int rChild = 2*(iParent+1);
@@ -119,14 +131,12 @@ class Heap {
 
       // jc - try setting all priorities to 1
       while (!isLeaf(iParent)
-            && (data[iParent] < data[lChild] || data[iParent] < data[rChild])) {
-        iChild = (data[lChild] <= data[rChild])?
-          rChild:
-          lChild;
+            && (data[lChild].larger(data[iParent]) || data[rChild].larger(data[iParent]))) {
+        iChild = (data[lChild].larger(data[rChild]))?
+          lChild:
+          rChild;
 
-        swap = data[iParent];
-        data[iParent] = data[iChild];
-        data[iChild] = swap;
+        swap(iParent,iChild);
 
         iParent = iChild;
         lChild = 2*(iParent+1)-1;
@@ -141,12 +151,33 @@ class Heap {
       };
       cout << endl;
     }
+    void printId() {
+      vector<Job>::iterator it;
+      for (it = data.begin(); it != data.end(); it++) {
+        it->printId();
+      };
+      cout << endl;
+    }
 
     bool empty() {
       return (data.size() == 0);
     };
     void dropLast() {
       data.pop_back();
+    };
+    void moveDown(int first, int last) {
+      int largest = 2*first + 1;
+      while (largest <= last) {
+        if (largest < last && data[largest] < data[largest + 1])
+          largest++;
+        if (data[first] < data[largest]) {
+          // swap parent and child
+          swap(first,largest);
+          first = largest;
+          largest = 2*first+1;
+        }
+        else largest = last+1;
+      }
     };
 
   private:
@@ -159,8 +190,21 @@ class Heap {
     bool isLeaf(int i) {
       return !(hasLeftChild(i) || hasRightChild(i));
     };
+    int parent(int child) {
+      if (child > 0)
+        return ceil(child/2.0)-1;
+      return 0;
+    };
+    void swap(int one, int other) {
+      Job temp;
+
+      temp = data[one];
+      data[one] = data[other];
+      data[other] = temp;
+    };
 
     vector<Job>   data;
+    int           n;
 };
 
 int main() {
