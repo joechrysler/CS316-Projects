@@ -1,0 +1,87 @@
+=========================
+Phase 1 - Symbol Building
+=========================
+SIZE       : INTEGER
+VALUE      : REAL
+COUNTER    : INTEGER
+** error COUNTER : INTEGER -- symbol too long
+
+BIT        : BINARY
+** error BIT : BINARY -- unknown type
+
+AVRG       : REAL
+TRUE       : BOOLEAN
+I          : INTEGER
+J          : INTR
+** error J : INTR -- unknown type
+
+X          : CHAR
+C          : CHARACTER
+** error C : CHARACTER -- unknown type
+
+INDEX      : POINTER
+** error INDEX : POINTER -- unknown type
+
+HEAD       : QUEUE
+** error HEAD : QUEUE -- unknown type
+
+TOP        : NULL
+** error TOP : NULL -- unknown type
+
+LIST       : INTEGER
+MAX        : REAL
+I          : INTEGER
+** error I : INTEGER -- attempt to redeclare the symbol
+
+ARRAY      : POINTER
+** error ARRAY : POINTER -- unknown type
+
+ITEM       : CHAR
+=========================
+Phase 1 - End            
+=========================
+
+
+=========================
+Phase 2 - Traversal      
+=========================
+AVRG       : REAL
+I          : INTEGER
+ITEM       : CHAR
+LIST       : INTEGER
+MAX        : REAL
+SIZE       : INTEGER
+TRUE       : BOOLEAN
+VALUE      : REAL
+X          : CHAR
+=========================
+Phase 2 - End            
+=========================
+
+
+=========================
+Phase 3 - Processing     
+=========================
+** error MAX : INTEGER -- type mismatch
+
+** error I : REAL -- type mismatch
+
+** error SUM : REAL -- attempt to reference undefined symbol
+
+** error AVRG : INTEGER -- type mismatch
+
+** error X : BOOL -- type mismatch
+
+** error STACK : NULL -- attempt to reference undefined symbol
+
+** error BOTTOM : POINTER -- attempt to reference undefined symbol
+
+** error LIST : ARRAY -- type mismatch
+
+** error ITEM : CHR -- type mismatch
+
+** error INDEX : CHARACTER -- attempt to reference undefined symbol
+
+=========================
+Phase 3 - End            
+=========================
