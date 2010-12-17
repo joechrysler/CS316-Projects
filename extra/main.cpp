@@ -59,78 +59,53 @@ class Symbol {
     // Setters
     //  These functions set the internal variables of the symbol to default or
     //  given values
-    void clear() {
-      type = value = "";
+    void set(string inValue, string inType) {
+      type = inType;
+      value = inValue;
     };
-  void set(string inValue, string inType) {
-    type = inType;
-    value = inValue;
-  };
-  void set(string inValue) {
-    value = inValue;
-  };
-  void setType(string inType) {
-    type = inType;
-  };
+    void clear()                  { type = value = ""; };
+    void set(string inValue)      { value = inValue; };
+    void setType(string inType)   { type = inType; };
 
-  // Printers
-  //  These functions print various versions of the symbol to a given output
-  //  file
-  void print(ofstream& outfile) {
-    outfile << setw(10) << left << value
-            << " : "
-            << type << endl;
-  };
-  void dprint(ofstream& outfile) {
-    outfile << setw(10) << left << value << " : " << type << endl;
-  };
-  void error(ofstream& outfile, string message) {
-    outfile << "** error " << value
-            << " : " << type
-            << " -- " << message
-            << endl << endl;
-  }
+    // Printers
+    //  These functions print various versions of the symbol to a given output
+    //  file
+    void print(ofstream& outfile)   { outfile << setw(10) << left << value << " : " << type << endl; };
+    void error(ofstream& outfile, string message) {
+      outfile << "** error " << value
+              << " : " << type
+              << " -- " << message
+              << endl << endl;
+    }
 
-  // Getters
-  //  These functions provides a way for external code to access private
-  //  variables in a read-only manner
-  string getType() {
-    return type;
-  };
+    // Getters
+    //  These functions provides a way for external code to access private
+    //  variables in a read-only manner
+    string getType() { return type; };
 
-  // Flaggers
-  //  These functions check whether certain conditions are true or false and
-  //  return the result
-  bool isReserved() {
-    if (value == "VAR"    ||
-        value == "BEGIN"  ||
-        value == "END")
-      return true;
-    return false;
-  };
-  bool isValidLength() {
-    return (value.size() <= 6);
-  };
-  bool isValidType() {
-    if (type == "BOOLEAN" ||
-        type == "CHAR"    ||
-        type == "INTEGER" ||
-        type == "REAL")
-      return true;
-    return false;
-  };
-  bool empty() {
-    return (value == "");
-  };
+    // Flaggers
+    //  These functions check whether certain conditions are true or false and
+    //  return the result
+    bool isReserved() {
+      if (value == "VAR"    ||
+          value == "BEGIN"  ||
+          value == "END") return true;
+      return false;
+    };
+    bool isValidLength() { return (value.size() <= 6); };
+    bool isValidType() {
+      if (type == "BOOLEAN" || 
+          type == "CHAR"    ||
+          type == "INTEGER" ||
+          type == "REAL") return true;
+      return false;
+    };
+    bool empty() { return (value == ""); };
 
-  // Operators
-  //  These define operators for use in the tree structure
-  bool operator> (Symbol &other){
-    return (value > other.value);
-  }
-  bool operator== (Symbol &other) {
-    return (value == other.value);
-  };
+    // Operators
+    //  These define operators for use in the tree structure
+    bool operator> (Symbol &other){ return (value > other.value); };
+    bool operator== (Symbol &other) { return (value == other.value); };
 
   private:
     string  type;
@@ -158,18 +133,14 @@ class Tree {
     // Add
     //  Takes a given symbol and inserts it at the proper place in the tree.
   void add(Symbol &newSymbol) {
-    if (n.empty()) {
-      n = newSymbol;
-    }
+    if (n.empty()) n = newSymbol;
     else {
       if (newSymbol > n) {
-        if (r == NULL)
-          r = new Tree();
+        if (r == NULL) r = new Tree();
         r->add(newSymbol);
       }
       if (n > newSymbol) {
-        if (l == NULL)
-          l = new Tree();
+        if (l == NULL) l = new Tree();
         l->add(newSymbol);
       }
     }
@@ -179,25 +150,19 @@ class Tree {
     //  Locates a given symbol in the tree and returns a pointer to it.
     //  Returns a null pointer if the symbol does not exist in the tree
   Tree* find(Symbol &newSymbol) {
-    if (n == newSymbol)
-      return this;
-    if (r != NULL && newSymbol > n)
-      return r->find(newSymbol);
-    if (l != NULL && n > newSymbol)
-      return l->find(newSymbol);
-    if (n.empty())
-      return NULL;
+    if (n == newSymbol)               return this;
+    if (r != NULL && newSymbol > n)   return r->find(newSymbol);
+    if (l != NULL && n > newSymbol)   return l->find(newSymbol);
+    if (n.empty())                    return NULL;
     return NULL;
   };
 
     // Printer
     //  Prints each symbol in the tree in order LNR
   void printInOrder(ofstream& outfile) {
-    if (l != NULL)
-      l->printInOrder(outfile);
-    n.dprint(outfile);
-    if (r != NULL)
-      r->printInOrder(outfile);
+    if (l != NULL) l->printInOrder(outfile);
+    n.print(outfile);
+    if (r != NULL) r->printInOrder(outfile);
   };
 
   public:
@@ -206,7 +171,7 @@ class Tree {
     Tree    *r;
 };
 int main(int argc, const char *argv[]) {
-	// === I/O file block ===
+	// I/O file block
 	ifstream		infile;	
 	ofstream		outfile;
 	infile.open("in.data");	
@@ -215,12 +180,12 @@ int main(int argc, const char *argv[]) {
 		cout << "couldn't open input or output file" << endl;
 		return 1;
 	}
-	//=== end ===
   
   // Variables
   string    value = "";
   string    type = "";
   string    trash = "";
+  string    line = "=========================";
   Symbol    s;
   Tree      *root = new Tree();
   bool      phaseEnd = false;
@@ -228,18 +193,13 @@ int main(int argc, const char *argv[]) {
 
   infile >> value;
   s.set(value);
-  if (s.isReserved()) {
-    outfile << "=========================" << endl;
-    outfile << "Phase 1 - Symbol Building" << endl;
-    outfile << "=========================" << endl;
-  };
+  if (s.isReserved()) outfile << line << endl << "Phase 1 - Symbol Building" << endl << line << endl;
 
   // Phase 1
   while (infile && !phaseEnd) {
     infile >> value;
     s.set(value);
-    if (s.isReserved())
-      phaseEnd = true;
+    if (s.isReserved()) phaseEnd = true;
     else {
       infile >> trash >> type;
       type = type.substr(0, type.length()-1);
@@ -257,52 +217,32 @@ int main(int argc, const char *argv[]) {
         s.error(outfile, "symbol too long");
         error = true;
       }
-      if (!error) {
-        root->add(s);
-      }
+      if (!error) root->add(s);
     }
     error = false;
   }
-  outfile << "=========================" << endl;
-  outfile << "Phase 1 - End            " << endl;
-  outfile << "=========================" << endl;
+  outfile << line << endl << "Phase 1 - End" << endl << line << endl;
   phaseEnd = false;
 
   // Phase 2
-  outfile << endl << endl;
-  outfile << "=========================" << endl;
-  outfile << "Phase 2 - Traversal      " << endl;
-  outfile << "=========================" << endl;
+  outfile << endl << endl << line << endl << "Phase 2 - Traversal" << endl << line << endl;
   root->printInOrder(outfile);
-  outfile << "=========================" << endl;
-  outfile << "Phase 2 - End            " << endl;
-  outfile << "=========================" << endl;
+  outfile << line << endl << "Phase 2 - End" << endl << line << endl;
   
-
   // Phase 3
-  outfile << endl << endl;
-  outfile << "=========================" << endl;
-  outfile << "Phase 3 - Processing     " << endl;
-  outfile << "=========================" << endl;
+  outfile << endl << endl << line << endl << "Phase 3 - Processing" << endl << line << endl;
   while (infile && !phaseEnd) {
     infile >> value;
     s.set(value);
-    if (s.isReserved())
-      phaseEnd = true;
+    if (s.isReserved()) phaseEnd = true;
     else {
       infile >> trash >> type;
       type = type.substr(0, type.length()-1);
       s.setType(type);
-      if (root->find(s) == NULL)
-        s.error(outfile, "attempt to reference undefined symbol");
-      else {
-        if (root->find(s)->n.getType() != s.getType())
-          s.error(outfile, "type mismatch");
-      }
+      if (root->find(s) == NULL) s.error(outfile, "attempt to reference undefined symbol");
+      else if (root->find(s)->n.getType() != s.getType()) s.error(outfile, "type mismatch");
     }
   }
-  outfile << "=========================" << endl;
-  outfile << "Phase 3 - End            " << endl;
-  outfile << "=========================" << endl;
+  outfile << line << endl << "Phase 2 - End" << endl << line << endl;
   return 0;
 }
